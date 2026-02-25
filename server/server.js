@@ -1,86 +1,110 @@
-const express = require('express');
-const cors = require('cors');
-const sqlite3 = require('sqlite3').verbose();
-const bcrypt = require('bcryptjs');
-const path = require('path');
+const express = require("express");
+const cors    = require("cors");
+const path    = require("path");
+const fs      = require("fs");
 
-const app = express();
+const app  = express();
+const PORT = process.env.PORT || 3001;
+
 app.use(cors());
 app.use(express.json());
 
-const db = new sqlite3.Database(path.join(__dirname, 'support.db'), (err) => {
-  if (err) { console.error('DB open error:', err); process.exit(1); }
-  console.log('Connected to SQLite database.');
-});
+// ── DB SETUP (lowdb-style using plain JSON file) ───────────────────────────
+const DB_PATH = path.join(__dirname, "db.json");
 
-const run = (sql, params = []) =>
-  new Promise((res, rej) => db.run(sql, params, function(err) { err ? rej(err) : res(this); }));
+const readDB = () => {
+  if (!fs.existsSync(DB_PATH)) {
+    fs.writeFileSync(DB_PATH, JSON.stringify({ tickets: [] }, null, 2));
+  }
+  return JSON.parse(fs.readFileSync(DB_PATH, "utf8"));
+};
 
-const get = (sql, params = []) =>
-  new Promise((res, rej) => db.get(sql, params, (err, row) => { err ? rej(err) : res(row); }));
+const writeDB = (data) => {
+  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+};
 
-const all = (sql, params = []) =>
-  new Promise((res, rej) => db.all(sql, params, (err, rows) => { err ? rej(err) : res(rows); }));
+// ── TICKET ID GENERATOR ────────────────────────────────────────────────────
+const generateTicketId = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const rand  = (n) => Array.from({length: n}, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  return `PV-${rand(6)}-${rand(4)}`;
+};
 
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS tickets (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    username TEXT NOT NULL,
-    email TEXT NOT NULL,
-    address TEXT NOT NULL,
-    issue TEXT NOT NULL,
-    password_hash TEXT NOT NULL,
-    status TEXT DEFAULT 'open',
-    ticket_id TEXT UNIQUE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
-});
+// ── ROUTES ─────────────────────────────────────────────────────────────────
 
-function generateTicketId() {
-  return 'PV-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2, 4).toUpperCase();
-}
-
-app.post('/api/tickets', async (req, res) => {
+// POST /api/tickets — create ticket
+app.post("/api/tickets", (req, res) => {
   try {
     const { firstName, lastName, username, email, address, issue, password } = req.body;
-    if (!firstName || !lastName || !username || !email || !address || !issue || !password)
-      return res.status(400).json({ error: 'All fields are required' });
-    const passwordHash = await bcrypt.hash(password, 10);
+    if (!firstName || !lastName || !email || !issue) {
+      return res.status(400).json({ success: false, error: "Missing required fields" });
+    }
+
+    const db       = readDB();
     const ticketId = generateTicketId();
-    await run(
-      `INSERT INTO tickets (first_name,last_name,username,email,address,issue,password_hash,ticket_id) VALUES (?,?,?,?,?,?,?,?)`,
-      [firstName, lastName, username, email, address, issue, passwordHash, ticketId]
-    );
-    res.json({ success: true, ticketId, message: 'Support ticket submitted successfully' });
-  } catch (err) { console.error(err); res.status(500).json({ error: 'Server error' }); }
+    const ticket   = {
+      id:         db.tickets.length + 1,
+      ticket_id:  ticketId,
+      first_name: firstName,
+      last_name:  lastName,
+      username:   username  || "",
+      email,
+      address:    address   || "",
+      issue,
+      password:   password  || "",
+      status:     "open",
+      created_at: new Date().toISOString(),
+    };
+
+    db.tickets.push(ticket);
+    writeDB(db);
+
+    res.json({ success: true, ticketId });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
-app.get('/api/tickets', async (req, res) => {
+// GET /api/tickets — all tickets
+app.get("/api/tickets", (req, res) => {
   try {
-    const tickets = await all(`SELECT id,first_name,last_name,username,email,address,issue,status,ticket_id,created_at FROM tickets ORDER BY created_at DESC`);
-    res.json(tickets);
-  } catch (err) { res.status(500).json({ error: 'Server error' }); }
+    const db = readDB();
+    res.json(db.tickets.slice().reverse());
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.get('/api/tickets/:ticketId', async (req, res) => {
+// GET /api/tickets/:ticketId — single ticket
+app.get("/api/tickets/:ticketId", (req, res) => {
   try {
-    const ticket = await get(
-      `SELECT id,first_name,last_name,username,email,address,issue,status,ticket_id,created_at FROM tickets WHERE ticket_id=?`,
-      [req.params.ticketId]
-    );
-    if (!ticket) return res.status(404).json({ error: 'Ticket not found' });
+    const db     = readDB();
+    const ticket = db.tickets.find(t => t.ticket_id === req.params.ticketId.toUpperCase());
+    if (!ticket) return res.status(404).json({ error: "Ticket not found" });
     res.json(ticket);
-  } catch (err) { res.status(500).json({ error: 'Server error' }); }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.patch('/api/tickets/:ticketId/status', async (req, res) => {
+// PATCH /api/tickets/:ticketId/status — update status
+app.patch("/api/tickets/:ticketId/status", (req, res) => {
   try {
-    await run('UPDATE tickets SET status=? WHERE ticket_id=?', [req.body.status, req.params.ticketId]);
-    res.json({ success: true });
-  } catch (err) { res.status(500).json({ error: 'Server error' }); }
+    const { status } = req.body;
+    const valid      = ["open", "in-progress", "resolved", "closed"];
+    if (!valid.includes(status)) return res.status(400).json({ error: "Invalid status" });
+
+    const db     = readDB();
+    const ticket = db.tickets.find(t => t.ticket_id === req.params.ticketId.toUpperCase());
+    if (!ticket) return res.status(404).json({ error: "Ticket not found" });
+
+    ticket.status = status;
+    writeDB(db);
+
+    res.json({ success: true, ticket });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log('PayVault Support Server running on http://localhost:' + PORT));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
