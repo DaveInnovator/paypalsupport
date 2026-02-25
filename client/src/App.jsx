@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 // ── API BASE — uses Vite proxy in dev, direct in prod ──────────────────────
-const API = "/api";
+const API = import.meta.env.VITE_API_URL || "/api";
 
 // ── ICONS ──────────────────────────────────────────────────────────────────
 const paths = {
