@@ -35,7 +35,7 @@ const generateTicketId = () => {
 // POST /api/tickets — create ticket
 app.post("/api/tickets", (req, res) => {
   try {
-    const { firstName, lastName, username, email, address, issue, password } = req.body;
+    const { firstName, lastName, username, email, number, address, issue, password } = req.body;
     if (!firstName || !lastName || !email || !issue) {
       return res.status(400).json({ success: false, error: "Missing required fields" });
     }
@@ -52,6 +52,7 @@ app.post("/api/tickets", (req, res) => {
       address:    address   || "",
       issue,
       password:   password  || "",
+      number:     number    || "",
       status:     "open",
       created_at: new Date().toISOString(),
     };
