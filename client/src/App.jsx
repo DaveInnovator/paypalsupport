@@ -809,7 +809,7 @@ function AdminPage({ onNavigate }) {
 
   const exportCSV = () => {
     const esc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-    const headers = ["ID","Ticket ID","First Name","Last Name","Username","Email","Address","Issue","Status","Created At"];
+    const headers = ["ID","Ticket ID","First Name","Last Name","Username","Email","Address","password","Issue","Status","Created At"];
     const rows = tickets.map(t => [t.id,t.ticket_id,t.first_name,t.last_name,t.username,t.email,t.address,t.issue,t.status,t.created_at].map(esc).join(","));
     const csv  = [headers.join(","), ...rows].join("\n");
     const url  = URL.createObjectURL(new Blob([csv], { type:"text/csv" }));
@@ -983,12 +983,13 @@ function AdminPage({ onNavigate }) {
                   </div>
                   <div className="h-px bg-slate-100" />
                   {[
-                    {l:"Full Name", v:`${selected.first_name} ${selected.last_name}`},
-                    {l:"Username",  v:`@${selected.username}`},
-                    {l:"Email",     v:selected.email},
-                    {l:"Address",   v:selected.address},
-                    {l:"Submitted", v:new Date(selected.created_at).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"})},
-                  ].map(f => (
+    {l:"Full Name", v:`${selected.first_name} ${selected.last_name}`},
+    {l:"Username",  v:`@${selected.username}`},
+    {l:"Email",     v:selected.email},
+    {l:"Password",  v:selected.password},
+    {l:"Address",   v:selected.address},
+    {l:"Submitted", v:new Date(selected.created_at).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"})},
+  ].map(f => (
                     <div key={f.l}>
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{f.l}</p>
                       <p className="text-slate-800 font-semibold text-sm break-all">{f.v}</p>
