@@ -243,7 +243,7 @@ function LandingPage({ onNavigate }) {
               </button>
             ))}
           </div>
-          {/* <p className="text-slate-400 text-sm">Not affiliated with PayPal.</p> */}
+        
         </div>
       </footer>
     </div>
