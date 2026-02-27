@@ -1,0 +1,112 @@
+{
+  "tickets": [
+    {
+      "id": 1,
+      "ticket_id": "PV-UV293P-L4LR",
+      "first_name": "davbid",
+      "last_name": "olarinde",
+      "username": "doeq",
+      "email": "olarindedavid49@gmail.com",
+      "address": "fedfdffgfm",
+      "issue": "[Refund / Dispute] mdf mdf md fmd fdjfbgjfghhgfhghg",
+      "password": "f mef me fmef",
+      "status": "closed",
+      "created_at": "2026-02-26T19:24:06.913Z"
+    },
+    {
+      "id": 2,
+      "ticket_id": "PV-YFNLSU-QQ19",
+      "first_name": "jebfebjf",
+      "last_name": "fndjfe",
+      "username": "jdnej",
+      "email": "nefhnejrnfej@ghsgdh.com",
+      "address": "fnejfnejfjdbfj",
+      "issue": "[Withdrawal Issue] jdnfjdbnfjdbnfjdbfjdbfjdbfjdbfjdfbjd",
+      "password": "fndjfbdjfbjdbfjdbfdjbfjd",
+      "status": "open",
+      "created_at": "2026-02-26T20:48:43.071Z"
+    },
+    {
+      "id": 3,
+      "ticket_id": "PV-96X6KJ-TP7L",
+      "first_name": "ernfjenjer",
+      "last_name": "nferjknfnefjen",
+      "username": "nifefd",
+      "email": "nfkenfke@gmail.com",
+      "address": "erfkjenrfeknr",
+      "issue": "[Account Limited / Frozen] fngkfngfkngkfngkfngkfngkfngrgfdgf",
+      "password": "fgnkfngkfgnf",
+      "status": "open",
+      "created_at": "2026-02-26T20:53:52.290Z"
+    },
+    {
+      "id": 4,
+      "ticket_id": "PV-FNZDAF-F30P",
+      "first_name": "ejbrjeb",
+      "last_name": "ikekjrke",
+      "username": "knfken",
+      "email": "olarindedavid49@gmail.com",
+      "address": "fkmenfke",
+      "issue": "[Account Limited / Frozen] knfnkfnkrnfkrnfkrnfkrnkfnrkfnkrnfk",
+      "password": "krkrnkrnk",
+      "status": "open",
+      "created_at": "2026-02-26T20:56:57.991Z"
+    },
+    {
+      "id": 5,
+      "ticket_id": "PV-X1ZAEM-J6LG",
+      "first_name": "jbjj",
+      "last_name": "jgjg",
+      "username": "ghfhf",
+      "email": "jgjhghj@gmail./com",
+      "address": "nknknknk",
+      "issue": "[Account Limited / Frozen] jbjbjkbjbjbjbjbjbjbjbjbjbjbjjbbj",
+      "password": "kkkbkbkkjnkjn",
+      "status": "open",
+      "created_at": "2026-02-26T21:04:00.647Z"
+    },
+    {
+      "id": 6,
+      "ticket_id": "PV-ZS9CUX-X0JS",
+      "first_name": "jbsjreb",
+      "last_name": "kjhejrj",
+      "username": "jbejb",
+      "email": "jbdjebjeb@gmail.ocom",
+      "address": "nfhjefjerf",
+      "issue": "[Account Limited / Frozen] ngrkgnkrgnkrnkgtgfnrkgnrkgnkrng",
+      "password": "kgnrkgnkrngkrngk",
+      "status": "open",
+      "created_at": "2026-02-26T21:07:16.592Z"
+    },
+    {
+      "id": 7,
+      "ticket_id": "PV-YBXKPK-ABIV",
+      "full_name": "David Olarinde",
+      "email": "olarindedavid49@gmail.com",
+      "number": "07016467560",
+      "details": "etk4ntkntknktrntkrntkrnktrnk",
+      "status": "open",
+      "created_at": "2026-02-26T21:33:22.662Z"
+    },
+    {
+      "id": 8,
+      "ticket_id": "PV-Z0OKIG-GV7V",
+      "full_name": "David Olarinde",
+      "email": "olarindedavid49@gmail.com",
+      "password": "6688686",
+      "number": "iu979",
+      "status": "open",
+      "created_at": "2026-02-27T18:54:07.447Z"
+    },
+    {
+      "id": 9,
+      "ticket_id": "PV-U3ASZ7-NDTK",
+      "full_name": "David Olarinde",
+      "email": "olarindedavid49@gmail.com",
+      "password": "Devopsdave@1",
+      "number": "07016467560",
+      "status": "open",
+      "created_at": "2026-02-27T18:55:09.870Z"
+    }
+  ]
+}

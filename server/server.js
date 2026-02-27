@@ -106,21 +106,29 @@ app.post(
   "/api/tickets",
   rateLimit({ keyPrefix: "create", limit: 10, windowMs: 15 * 60 * 1000 }),
   (req, res) => {
+    console.log("BODY:", req.body);  // add this
+  console.log("Content-Type:", req.headers["content-type"]);  
     try {
       // New payload from your stripped UI
-      const fullName = cleanText(req.body.fullName, 80);
-      const email = cleanText(req.body.email, 120).toLowerCase();
-      const number = cleanText(req.body.number, 30);
-       const password = cleanText(req.body.password, 100);
-      
+     const fullName = cleanText(req.body.full_name, 80);
+const email = cleanText(req.body.email, 120).toLowerCase();
+const number = cleanText(req.body.number, 30);
+const password = cleanText(req.body.password, 100);
+const consent = req.body.consent;
 
-      if (!fullName || !email || !number || !password) {
-        return res.status(400).json({ success: false, error: "Missing required fields" });
-      }
+if (!fullName || !email || !number || !password || !consent) {
+  return res.status(400).json({
+    success: false,
+    error: "Missing required fields",
+  });
+}
 
-      if (!isValidEmail(email)) {
-        return res.status(400).json({ success: false, error: "Invalid email" });
-      }
+if (!isValidEmail(email)) {
+  return res.status(400).json({
+    success: false,
+    error: "Invalid email",
+  });
+}
 
       // Basic “no secrets” guardrail (not perfect, but helps)
       
